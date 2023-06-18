@@ -6,8 +6,13 @@ module.exports = defineConfig({
     proxy: {
       "/game": {
         target: "http://xiiaoxiongmc.e2.luyouxia.net:24235",
-        ws: false,
+        ws: true,
         pathRewrite: { "^/game": "" },
+        changeOrigin: true,
+      },
+      "/socket.io": {
+        target: "http://xiiaoxiongmc.e2.luyouxia.net:24947",
+        ws: true,
         changeOrigin: true,
       },
     },

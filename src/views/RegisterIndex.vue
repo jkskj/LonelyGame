@@ -69,7 +69,7 @@
                 <el-button style="width:100%;"
                            type="primary"
                            @click.stop="register"
-                           :disabled="isDisabled&&!isSending">
+                           :disabled="isDisabled||isSending">
                   注册<el-icon>
                   </el-icon>
                 </el-button>
@@ -109,7 +109,7 @@ export default {
     var validatePass2 = (rule, value, callback) => {
       if (value === '') {
         callback(new Error('请再次输入密码'));
-      } else if (value !== this.ruleForm.pass) {
+      } else if (value !== this.ruleForm.password) {
         callback(new Error('两次输入密码不一致!'));
       } else {
         callback();
@@ -196,7 +196,8 @@ export default {
     mail () {
       //通过new 一个FormData()构造函数来创建一个空对象
       let formData = new FormData();
-      formData = jsToFormData(this.ruleForm.mail);
+      formData.append('mail', this.ruleForm.mail);
+      console.log(formData)
       sendMail(formData).then(
         response => {
           if (response.data.code == 200) {
@@ -253,7 +254,7 @@ export default {
   background-clip: padding-box;
   margin: 10px auto;
   padding: 10px 10px 10px 10px;
-  width: 350px;
+  width: 50vh;
   background: #fff;
   border: 1px solid #eaeaea;
   box-shadow: 0 0 35px #cac6c6;

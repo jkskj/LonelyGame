@@ -23,15 +23,19 @@ const mutations = {
   setPermission(state, value) {
     state.permission = value;
   },
+  setReal(state, value) {
+    state.real = value;
+  },
 };
 const state = {
   token: "",
-  userName: "???",
-  email: "???",
+  userName: "",
+  email: "",
   id: 0,
   avatar: "",
   balance: 0,
-  permission: "",
+  permission: 1,
+  real: 0,
 };
 export default new Vuex.Store({
   state,

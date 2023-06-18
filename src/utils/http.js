@@ -12,16 +12,17 @@ const http = {
     const config = {
       method: "get",
       url: url,
+      data: params,
     };
-    if (params) config.params = params;
     return request(config);
   },
   post(url, params) {
     const config = {
       method: "post",
       url: url,
+      data: params,
+      timeout: 20000,
     };
-    if (params) config.data = params;
     return request(config);
   },
   put(url, params) {

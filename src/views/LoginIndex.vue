@@ -35,7 +35,7 @@
                 <el-button style="width:100%;"
                            type="primary"
                            @click="login"
-                           :disabled="isDisabled&&!isSending">
+                           :disabled="isDisabled||isSending">
                   登录<el-icon class="el-icon--right">
                   </el-icon>
                 </el-button>
@@ -99,17 +99,20 @@ export default {
             message: '登录成功,现在返回主页面',
             type: 'success'
           })
-          this.$cookie.set('token', res.data.data.token)
+          this.$cookie.set('token', res.data.data.token, { 'sameSite': 'None', 'Secure': 'true', 'expires': 30 })
+          this.$cookie.set('userName', res.data.data.username, { 'sameSite': 'None', 'Secure': 'true', 'expires': 30 })
           this.$store.commit("setToken", res.data.data.token)
           let formData2 = new FormData();
           formData2.append('username', res.data.data.username)
           userCenter(formData2).then(response => {
+            console.log(response)
             this.$store.commit("setId", response.data.data.id)
             this.$store.commit("setName", response.data.data.username)
             this.$store.commit("setAvatar", response.data.data.avatar)
             this.$store.commit("setEmail", response.data.data.mail)
             this.$store.commit("setBalance", response.data.data.balance)
             this.$store.commit("setPermission", response.data.data.permission)
+            this.$store.commit("setReal", response.data.data.real)
             this.$router.push({ path: '/main' })
           })
         }
@@ -134,13 +137,14 @@ export default {
   position: fixed;
   background: url('../../public/img/cover.jpg') no-repeat;
   background-size: 100% 100%;
+  overflow: scroll;
 }
 .login-container {
   border-radius: 15px;
   background-clip: padding-box;
   margin: 90px auto;
   padding: 35px 35px 15px 35px;
-  width: 350px;
+  width: 50vw;
   background: #fff;
   border: 1px solid #eaeaea;
   box-shadow: 0 0 35px #cac6c6;

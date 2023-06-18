@@ -1,6 +1,7 @@
 /****   request.js   ****/
 // 导入axios
 import axios from "axios";
+// import qs from "qs";
 // 使用element-ui Message做消息提醒
 import { Message } from "element-ui";
 import Cookies from "js-cookie";
@@ -15,15 +16,16 @@ const service = axios.create({
 service.interceptors.request.use(
   (config) => {
     //发请求前做的一些处理，数据转化，配置请求头，设置token,设置loading等，根据需求去添加
-    config.data = JSON.stringify(config.data); //数据转化,也可以使用qs转换
+    // config.data = qs.stringify(config.data); //数据转化,也可以使用qs转换
     config.headers = {
       "Content-Type": "multipart/form-data", //配置请求头
     };
-    //如有需要：注意使用token的时候需要引入cookie方法或者用本地localStorage等方法，推荐js-cookie
-    const token = Cookies.getCookie("token"); //这里取token之前，你肯定需要先拿到token,存一下
+    // 如有需要：注意使用token的时候需要引入cookie方法或者用本地localStorage等方法，推荐js-cookie
+    const token = Cookies.get("token"); //这里取token之前，你肯定需要先拿到token,存一下
     if (token) {
+      console.log("token:", token);
       // config.params = { token: token }; //如果要求携带在参数中
-      config.headers.Authorization = token; //如果要求携带在请求头中
+      config.headers["Authorization"] = token; //如果要求携带在请求头中
     }
     return config;
   },

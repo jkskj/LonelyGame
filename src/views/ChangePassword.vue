@@ -48,7 +48,7 @@
                 <el-button style="width:100%;"
                            type="primary"
                            @click="change"
-                           :disabled="isDisabled&&!isSending">
+                           :disabled="isDisabled||isSending">
                   修改<el-icon class="el-icon--right">
                   </el-icon>
                 </el-button>
