@@ -18,7 +18,7 @@
                          @error="errorHandler">
                 <img src="https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png" />
               </el-avatar>
-              {{username}}
+              {{userName}}
             </h2>
           </el-col>
           <el-col :span="6"
@@ -73,7 +73,7 @@
         <el-row align="middle">
           <el-col>
             <el-descriptions>
-              <el-descriptions-item label="出价人数">{{now_buyer}}</el-descriptions-item>
+              <el-descriptions-item label="出价人数">{{nowBuyer}}</el-descriptions-item>
             </el-descriptions>
           </el-col>
         </el-row>
@@ -84,43 +84,27 @@
 </template>
 
 <script>
-import { viewTopic, reportUser } from '@/api/api'
+import { reportUser } from '@/api/api'
 export default {
   name: "TopicDetail",
   data () {
     return {
-      title: "",
-      content: "",
-      price: "",
-      username: "",
       visible: false,
-      isConfirmed: false,
-      id: 0,
       reason: "",
-      avatar: "",
-      fav: 0,
-      now_buyer: ''
+      isConfirmed: false,
     }
   },
   props: {
-    post_id: { type: String, required: true },
+    postId: { required: true },
     isReport: { default: false },
-  },
-  mounted () {
-    let formData = new FormData();
-    console.log(this.post_id)
-    formData.append('post_id', String(this.post_id))
-    viewTopic(formData).then(res => {
-      console.log(res)
-      this.title = res.data.data.detail.title
-      this.id = res.data.data.detail.user_id
-      this.content = res.data.data.detail.content
-      this.price = res.data.data.detail.price
-      this.username = res.data.data.detail.username
-      this.avatar = res.data.data.detail.avatar
-      this.fav = res.data.data.detail.fav
-      this.now_buyer = res.data.data.detail.now_buyer
-    })
+    title: { type: String, required: true },
+    content: { type: String, required: true },
+    price: { required: true },
+    userName: { type: String, required: true },
+    id: { required: true },
+    avatar: { type: String, required: true },
+    fav: { required: true },
+    nowBuyer: { required: true },
   },
   methods: {
     errorHandler () {

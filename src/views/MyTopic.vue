@@ -1,6 +1,14 @@
 <template>
-  <topic-detail :post_id="this.$route.query.post_id"
-                :isReport="false">
+  <topic-detail :postId="this.postId"
+                :isReport="false"
+                :title="this.title"
+                :id="this.id"
+                :content="this.content"
+                :price="this.price"
+                :userName="this.userName"
+                :avatar="this.avatar"
+                :fav="this.fav"
+                :nowBuyer="this.nowBuyer">
     <div class="button">
       <el-button type="primary"
                  :style="width"
@@ -24,7 +32,7 @@
             v-show="isLook">
       <el-col>
         <el-descriptions>
-          <el-descriptions-item label="价格">{{price}}</el-descriptions-item>
+          <el-descriptions-item label="价格">{{givePrice}}</el-descriptions-item>
         </el-descriptions>
       </el-col>
     </el-row>
@@ -33,7 +41,7 @@
 
 <script>
 import TopicDetail from "@/components/TopicDetail.vue"
-import { changCover } from '@/api/api'
+import { changCover, viewTopic } from '@/api/api'
 export default {
   name: "MyTopic",
   components: { TopicDetail },
@@ -42,7 +50,16 @@ export default {
       isChange: false,
       width: "30%",
       isLook: false,
-      price: 0
+      givePrice: 0,
+      title: "",
+      content: "",
+      price: "",
+      userName: "666",
+      id: 0,
+      avatar: "",
+      fav: 0,
+      nowBuyer: '',
+      postId: 0
     }
   },
   methods: {
@@ -52,7 +69,7 @@ export default {
     sentCover (val) {
       let formData = new FormData();
       formData.append('file', val.file);
-      formData.append('postid', this.$route.query.post_id);
+      formData.append('postid', this.postId);
       changCover(formData).then(res => {
         if (res.data.code === 200) {
           this.isChange = false
@@ -84,11 +101,11 @@ export default {
     },
     look () {
       let formData = new FormData();
-      formData.append('pid', this.$route.query.post_id);
+      formData.append('pid', this.postId);
       changCover(formData).then(res => {
         if (res.data.code === 200) {
           this.isLook = true
-          this.price = res.data.price
+          this.givePrice = res.data.price
         } else {
           this.$message({
             message: '查看失败' && res.data.message,
@@ -99,7 +116,25 @@ export default {
         console.log(err)
       })
     },
-  }
+  },
+  mounted () {
+    let formData = new FormData();
+    console.log(this.post_id)
+    formData.append('post_id', String(this.post_id))
+    viewTopic(formData).then(res => {
+      console.log(res)
+      this.title = res.data.data.detail.title
+      this.id = res.data.data.detail.user_id
+      this.content = res.data.data.detail.content
+      this.price = res.data.data.detail.price
+      this.userName = res.data.data.detail.username
+      this.avatar = res.data.data.detail.avatar
+      this.fav = res.data.data.detail.fav
+      this.nowBuyer = res.data.data.detail.now_buyer
+    })
+    this.postId = this.$route.query.post_id
+  },
+
 }
 </script>
 

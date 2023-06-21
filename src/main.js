@@ -72,10 +72,6 @@ new Vue({
     reconnect() {
       console.log("重连成功");
     },
-    welcome: (data) => {
-      //全局监听订阅事件，需要与后端约定好
-      console.log("welcome data", data);
-    },
   },
 }).$mount("#app");
 

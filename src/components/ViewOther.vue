@@ -50,7 +50,6 @@
 
 <script>
 import { collectTopic, givePrice } from '../api/api'
-import { viewTopic } from '@/api/api'
 export default {
   name: "ViewOther",
   data () {
@@ -72,15 +71,18 @@ export default {
       ruleForm: {
         price: '',
       },
-      id: 0
     }
   },
-  props: { post_id: { required: true } },
+  props: {
+    postId: { required: true },
+    userName: { type: String, required: true },
+    id: { required: true },
+  },
   methods: {
     collect () {
       let formData = new FormData();
       this.isSending = true
-      formData.append('post_id', String(this.post_id))
+      formData.append('post_id', String(this.postId))
       collectTopic(formData).then(res => {
         this.isSending = false
         console.log(res)
@@ -101,7 +103,7 @@ export default {
     commit () {
       let formData = new FormData();
       this.isSending = true
-      formData.append('post_id', String(this.post_id))
+      formData.append('post_id', String(this.postId))
       formData.append('price', this.ruleForm.price)
       givePrice(formData).then(res => {
         this.isSending = false
@@ -124,18 +126,10 @@ export default {
       this.isCommit = !this.isCommit
     },
     toChat () {
-      this.$router.push({ path: '/chat-room', query: { "fid": this.id } })
+      //传递聊天对象信息
+      this.$router.push({ path: '/chat-room', query: { "toUser": this.userName, "uid": this.id } })
     }
   },
-  mounted () {
-    let formData = new FormData();
-    console.log(this.post_id)
-    formData.append('post_id', String(this.post_id))
-    viewTopic(formData).then(res => {
-      console.log(res)
-      this.id = res.data.data.detail.user_id
-    })
-  }
 }
 
 </script>

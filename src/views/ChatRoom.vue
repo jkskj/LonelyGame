@@ -26,11 +26,11 @@
       <el-header style="height:5%;line-height:30px;border-bottom: 1px solid #C0C4CC;">当前聊天对象&emsp;{{friend}}</el-header>
       <el-main style="background-color: #F2F6FC;height:70%;border-bottom: 1px solid #C0C4CC;">
         <ChatList v-for="item in contentList"
-                  :userId="item.from_user.id"
-                  :userName="item.from_user.user_name"
-                  :content="item.message_data"
+                  :userName="item.fromUser.userName"
+                  :content="item.messageData"
                   :id="id"
-                  :key="item.id"></ChatList>
+                  :key="item.id"
+                  :time="item.time"></ChatList>
 
       </el-main>
       <el-footer style="height:30%;">
@@ -81,11 +81,13 @@ export default {
       contentList: [],
       fid: 0,
       friend: "",
+      num: 0,
+      id: 0,
+      message: { 'fromUser': { "id": 0, "userName": "" }, 'id': 0, 'messageData': "", time: '' },
       extensions: [
         new Doc(), // 必须项
         new Text(), // 必须项
         new Paragraph(), // 必须项
-
         new Image({// 默认会把图片生成 base64 字符串和内容存储在一起，如果需要自定义图片上传
           uploadRequest (file) {
             // 如果接口要求 Content-Type 是 multipart/form-data，则请求体必须使用 FormData
@@ -104,45 +106,33 @@ export default {
       ],
     }
   },
-  sockets: { //监听用的是this.sockets   发送消息是this.$socket，不要弄混
-    connecting () { console.log('正在连接') },
-    connect () { console.log('连接成功') },
-    disconnect () { console.log('断开连接') },
-    connect_failed () { console.log('连接失败') },
-    error () { console.log('错误发生，并且无法被其他事件类型所处理') },
-    reconnecting () { console.log('正在重连') },
-    reconnect_failed () { console.log('重连失败') },
-    reconnect () { console.log('重连成功') },
-    message: data => {//全局监听订阅事件，需要与后端约定好
-      console.log('welcome data', data)
-    },
-    join: data => {//全局监听订阅事件，需要与后端约定好
-      console.log('welcome data', data)
-    }
-  },
   methods: {
-
-    // 连接socket
-    connect () {
-
-      // this.$socket.open()       // 开始连接socket
-
-      // 订阅事件
-      this.sockets.subscribe('message', data => {
-        console.log('welcome data ', data)
-      })
-
-    },
-
     // 发送消息
     sendMessage () {
       console.log(this.textarea)
       this.$socket.emit('message', {
-        "from": this.$store.state.id,
+        "from": String(this.$store.state.id),
         "message": this.textarea,
         "to": this.fid
       })
+      var date = new Date();
+      // 年月日
+      var year = date.getFullYear();
+      var month = date.getMonth() + 1;
+      var day = date.getDate();
 
+      // 时分秒
+      var hour = date.getHours();
+      var minute = date.getMinutes();
+      var second = date.getSeconds();
+      var time = year + "-" + month + "-" + day + " " + hour + ":" + minute + ":" + second
+      this.message.fromUser.id = this.$store.state.id
+      this.message.fromUser.userName = this.$store.state.userName
+      this.message.messageData = this.textarea
+      this.message.id = this.num
+      this.message.time = time
+      this.num++
+      this.contentList.push(JSON.parse(JSON.stringify(this.message)))
     },
 
     onSubmit () {
@@ -151,16 +141,29 @@ export default {
 
   },
   mounted () {
-    // 订阅事件，testCall 是与后端约定好的名称
-    this.sockets.subscribe('message', (res) => {
-      console.log(res)
-    })
-    this.sockets.subscribe('join', (res) => {
-      console.log(res)
-    })
     this.$socket.emit('join', { "id": this.$store.state.id })
-    this.fid = this.$route.query.fid
+    this.sockets.unsubscribe('message')
+    console.log('this.$socket')
+    //订阅事件
+    this.sockets.subscribe('message', data => {
+      console.log('message data', data)
+      if (data.type == "receive") {
+        this.message.fromUser.id = data.from
+        this.message.fromUser.userName = data.username
+        this.message.messageData = data.message
+        this.message.time = data.date
+        this.message.id = this.num
+        this.num++
+        this.contentList.push(JSON.parse(JSON.stringify(this.message)))
+      }
+    })
+    this.fid = this.$route.query.uid
+    this.friend = this.$route.query.toUser
+    this.id = this.$store.state.id
   },
+  beforeDestroy () {
+    this.sockets.unsubscribe('message')
+  }
 }
 </script>
 
