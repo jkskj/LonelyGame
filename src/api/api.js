@@ -78,6 +78,14 @@ export function givePrice(params) {
 export function changCover(params) {
   return http.post("/game/change_cover", params);
 }
+//退钱
+export function backMoney(params) {
+  return http.post("/game/admin/back_money", params);
+}
+//搜索帖子
+export function search(params) {
+  return http.post("/game/search", params);
+}
 
 //get请求
 //获取已发布贴
@@ -106,7 +114,7 @@ export function getAudit(params) {
 }
 //获取推荐页
 export function getRecommend(params) {
-  return http.get("/game/buyer/posts", params);
+  return http.get("/game/buyer/posts?page=1", params);
 }
 //查看开价列表
 export function getPrice(params) {

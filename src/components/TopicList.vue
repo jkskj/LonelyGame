@@ -1,7 +1,7 @@
 <template>
   <el-row class="topic-list"
           type="flex">
-    <el-col :span="3"><el-avatar :size="100"
+    <el-col :span="3"><el-avatar :size="130"
                  :src="cover"
                  :fit="fit"></el-avatar></el-col>
     <el-col :span="12"
@@ -29,13 +29,13 @@ export default {
 
 <style scoped>
 .topic-list {
-  height: 100px;
+  height: 130px;
   width: 100%;
-  background: #e40e0e;
+  background: #0ea4e4;
 }
 .content-div {
   text-align: left;
-  line-height: 100px;
+  line-height: 130px;
   padding: 0 100px;
 }
 .el-row {

@@ -119,8 +119,8 @@ export default {
   },
   mounted () {
     let formData = new FormData();
-    console.log(this.post_id)
-    formData.append('post_id', String(this.post_id))
+    this.postId = this.$route.query.post_id
+    formData.append('post_id', String(this.postId))
     viewTopic(formData).then(res => {
       console.log(res)
       this.title = res.data.data.detail.title
@@ -132,7 +132,7 @@ export default {
       this.fav = res.data.data.detail.fav
       this.nowBuyer = res.data.data.detail.now_buyer
     })
-    this.postId = this.$route.query.post_id
+
   },
 
 }

@@ -24,7 +24,7 @@
               </el-form-item>
               <el-button style="width:100%;"
                          :disabled="isTimeout"
-                         @click.stop="mail"
+                         @click="mail"
                          type="primary"
                          icon="el-icon-message">{{codeText}}
               </el-button>
@@ -130,9 +130,11 @@ export default {
     mail () {
       //通过new 一个FormData()构造函数来创建一个空对象
       let formData = new FormData();
-      formData = jsToFormData(this.ruleForm.mail);
+      formData.append("mail", this.$store.state.email);
+      console.log(this.$store.state.mail)
       changeMail(formData).then(
         response => {
+          console.log(response)
           if (response.data.code == 200) {
             console.log("验证码发生成功", response);
             this.$alert('验证码发生成功', '提示', { type: 'success' })
@@ -181,9 +183,6 @@ export default {
         });
     }
   },
-  mounted () {
-    this.mail = this.$store.state.mail
-  }
 }
 
 </script>

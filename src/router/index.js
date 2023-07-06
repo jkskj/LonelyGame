@@ -14,6 +14,10 @@ import AuditTopic from "../views/AuditTopic.vue";
 import ViewTopic from "../views/ViewTopic.vue";
 import MyTopic from "../views/MyTopic.vue";
 import ChatRoom from "../views/ChatRoom.vue";
+import AuditList from "../views/AuditList.vue";
+import AllowUser from "../views/AllowUser.vue";
+import ReportList from "../views/ReportList.vue";
+import BackMoney from "../views/BackMoney.vue";
 // 创建并暴露路由
 export default new VueRouter({
   //   history: createWebHistory(process.env.BASE_URL),
@@ -25,7 +29,29 @@ export default new VueRouter({
     { name: "center-index", path: "/center", component: UserCenter },
     { name: "change-password", path: "/password", component: ChangePassword },
     { name: "post-topic", path: "/post-topic", component: PostTopic },
-    { name: "admin-index", path: "/admin", component: AdminIndex },
+    {
+      name: "admin-index",
+      path: "/admin",
+      component: AdminIndex,
+      children: [
+        {
+          path: "/audit",
+          component: AuditList,
+        },
+        {
+          path: "/allow",
+          component: AllowUser,
+        },
+        {
+          path: "/report",
+          component: ReportList,
+        },
+        {
+          path: "/back",
+          component: BackMoney,
+        },
+      ],
+    },
     { name: "home-index", path: "/home", component: HomeIndex },
     { name: "audit", path: "/audit-topic", component: AuditTopic },
     { name: "view", path: "/view-topic", component: ViewTopic },

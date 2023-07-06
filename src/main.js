@@ -25,7 +25,7 @@ Vue.use(
     connection: SocketIO("http://localhost:8081/"),
     options: {
       // 创建时是否自动连接 我们这里设定为false,在指定页面再开启
-      autoConnect: true,
+      autoConnect: false,
     },
     // 如果没有使用到 store 可不写
     // vuex: {

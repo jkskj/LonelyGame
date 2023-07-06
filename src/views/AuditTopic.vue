@@ -1,5 +1,14 @@
 <template>
-  <topic-detail :post_id="this.$route.query.post_id">
+  <topic-detail :postId="this.postId"
+                :isReport="false"
+                :title="this.title"
+                :id="this.id"
+                :content="this.content"
+                :price="this.price"
+                :userName="this.userName"
+                :avatar="this.avatar"
+                :fav="this.fav"
+                :nowBuyer="this.nowBuyer">
     <el-row>
       <el-col>
         <el-button style="width:40%;"
@@ -45,7 +54,7 @@
 </template>
 
 <script>
-import { auditPost } from '../api/api'
+import { auditPost, viewTopic } from '../api/api'
 import TopicDetail from "@/components/TopicDetail.vue"
 export default {
   name: "AuditTopic",
@@ -69,7 +78,16 @@ export default {
           { validator: checkEmpty, trigger: 'blur' }
         ],
       },
-      isPass: true
+      isPass: true,
+      title: "",
+      content: "",
+      price: "",
+      userName: "666",
+      id: 0,
+      avatar: "",
+      fav: 0,
+      nowBuyer: '',
+      postId: 0
     }
   },
   computed: {
@@ -107,7 +125,20 @@ export default {
   },
   mounted () {
     this.post_id = this.$route.query.post_id
-    console.log(this.post_id)
+    let formData = new FormData();
+    this.postId = this.$route.query.post_id
+    formData.append('post_id', String(this.postId))
+    viewTopic(formData).then(res => {
+      console.log(res)
+      this.title = res.data.data.detail.title
+      this.id = res.data.data.detail.user_id
+      this.content = res.data.data.detail.content
+      this.price = res.data.data.detail.price
+      this.userName = res.data.data.detail.username
+      this.avatar = res.data.data.detail.avatar
+      this.fav = res.data.data.detail.fav
+      this.nowBuyer = res.data.data.detail.now_buyer
+    })
   }
 }
 </script>

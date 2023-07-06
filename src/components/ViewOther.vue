@@ -94,7 +94,7 @@ export default {
         }
         else {
           this.$message({
-            message: res.data.msg || '收藏失败',
+            message: res.data.message || '收藏失败',
             type: 'warning'
           });
         }
@@ -116,7 +116,7 @@ export default {
         }
         else {
           this.$message({
-            message: res.data.msg || '出价失败',
+            message: res.data.message || '出价失败',
             type: 'warning'
           });
         }

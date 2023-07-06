@@ -1,5 +1,5 @@
 <template>
-  <div class="allow">
+  <div>
     <el-container class="allow-container"
                   label-positon="left"
                   label-width="0px"
@@ -92,16 +92,6 @@ export default {
 }
 </script>
 <style>
-.allow {
-  background-position: center;
-  height: 100%;
-  width: 100%;
-  background-size: cover;
-  position: fixed;
-  background: url('../../public/img/cover.jpg') no-repeat;
-  background-size: 100% 100%;
-  overflow: scroll;
-}
 .allow-container {
   border-radius: 15px;
   background-clip: padding-box;

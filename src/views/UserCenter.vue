@@ -37,9 +37,9 @@
           <el-descriptions-item>
             <template slot="label">
               <i class="el-icon-tickets"></i>
-              备注
+              实名认证
             </template>
-            <el-tag size="small">学校</el-tag>
+            <el-tag size="small">{{isReal}}</el-tag>
           </el-descriptions-item>
           <el-descriptions-item>
             <template slot="label">
@@ -78,7 +78,7 @@
           <i class="el-icon-plus avatar-uploader-icon"></i>
         </el-upload>
         <div class="button"
-             v-show="!realShow&&$store.state.real">
+             v-show="!this.$store.state.real">
           <el-button type="primary"
                      :style="width"
                      @click="toReal">实名认证
@@ -107,7 +107,6 @@
                               prop="password">
                   <el-input type="text"
                             v-model="ruleForm.name"
-                            show-password
                             autocomplete="off"
                             prefix-icon="el-icon-lock"></el-input>
                 </el-form-item>
@@ -186,6 +185,12 @@ export default {
       }
       return true;
     },
+    isReal () {
+      if (this.$store.state.real) {
+        return "完成";
+      } else
+        return "未完成"
+    }
   },
   methods: {
     errorHandler () {
@@ -200,18 +205,17 @@ export default {
     sendAvatar (val) {
       let formData = new FormData();
       formData.append('file', val.file);
-      const fileReader = new FileReader();
-      let that = this;
-      fileReader.readAsDataURL(val.file)
-      fileReader.addEventListener('load', function () {
-        that.$store.commit("setAvatar", fileReader.result);
-      })
-      // this.isChange = false
-      // sendAvatar(formData).then(res => {
-
-      //   console.log(res)
-      //   // this.avatar = res.data.data.avatar
-      // });
+      // const fileReader = new FileReader();
+      // let that = this;
+      // fileReader.readAsDataURL(val.file)
+      // fileReader.addEventListener('load', function () {
+      //   that.$store.commit("setAvatar", fileReader.result);
+      // })
+      this.isChange = false
+      sendAvatar(formData).then(res => {
+        console.log(res)
+        this.$store.commit("setAvatar", res.data.data.avatar);
+      });
     },
     beforeAvatarUpload (file) {
       const isJPG = file.type === 'image/jpeg';
@@ -238,11 +242,20 @@ export default {
       toReal(formData).then(res => {
         this.isSending = false
         console.log(res)
-        this.$message({
-          message: '认证成功',
-          type: 'success'
-        });
-        this.$store.commit("setReal", 1)
+        if (res.data.code != 200) {
+          this.$message({
+            message: res.data.message,
+            type: 'error'
+          });
+        }
+        else {
+          this.$message({
+            message: '认证成功',
+            type: 'success'
+          });
+          this.$store.commit("setReal", 1)
+          this.realShow = false
+        }
       })
     },
     toReal () {

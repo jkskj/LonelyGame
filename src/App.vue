@@ -16,7 +16,7 @@
       </el-container>
       <el-container class="right">
         <el-menu-item index="/center">我的个人中心</el-menu-item>
-        <el-menu-item index="4">收藏夹</el-menu-item>
+        <!-- <el-menu-item index="4">收藏夹</el-menu-item> -->
         <el-menu-item index="/chat-room">聊天室</el-menu-item>
         <el-menu-item index="/post-topic">我要发贴</el-menu-item>
       </el-container>
@@ -51,6 +51,7 @@ export default {
     if (this.$cookie.get('token') && this.$cookie.get('userName')) {
       let formData2 = new FormData();
       formData2.append('username', this.$cookie.get('userName'))
+      //获取用户信息
       userCenter(formData2).then(response => {
         console.log(response)
         this.$store.commit("setId", response.data.data.id)
@@ -59,12 +60,27 @@ export default {
         this.$store.commit("setEmail", response.data.data.mail)
         this.$store.commit("setBalance", response.data.data.balance)
         this.$store.commit("setPermission", response.data.data.permission)
+        this.$store.commit("setReal", response.data.data.real)
         this.$router.push('/main');
       });
     }
     else {
       this.$router.push('/home');
     }
+    this.$socket.connect();
+    this.sockets.subscribe('message', data => {
+      console.log("提醒")
+      if (data.type == "receive") {
+        this.$message({
+          message: data.username + "给你发来了一条消息",
+          type: "success",
+        });
+      }
+    })
+  },
+  beforeDestroy () {
+    this.$socket.close();
+    this.sockets.unsubscribe('message')
   }
 }
 </script>

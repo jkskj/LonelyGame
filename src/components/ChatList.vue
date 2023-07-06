@@ -1,16 +1,15 @@
 <template>
   <div v-if="userId != id">
     <el-row :gutter="20">
-      <el-col :span="3"><img style="width:35px;height:35px;"
-             :src="avatar" />{{userName}}</el-col>
-      <el-col :span="12">
+      <el-col :span="2"><img style="width:50px;height:50px;"
+             :src="avatar" /><span class="name">{{userName}}</span></el-col>
+      <el-col :span="12"
+              class="content-div">
         <div v-html="content"></div>
       </el-col>
     </el-row>
     <el-row>
-      <el-col :span="12"
-              class="content-div"
-              style="text-align: right;">
+      <el-col :span="12">
         {{time}}
       </el-col>
     </el-row>
@@ -23,12 +22,12 @@
               style="text-align: right;">
         <div v-html="content"></div>
       </el-col>
-      <el-col :span="3"><img style="width:35px;height:35px;"
-             :src="avatar" />{{userName}}</el-col>
+      <el-col :span="2"
+              style="text-align: right;"><img style="width:50px;height:50px;"
+             :src="avatar" /><span class="name">{{userName}}</span></el-col>
     </el-row>
     <el-row>
-      <el-col :span="12"
-              class="content-div"
+      <el-col :span="14"
               style="text-align: right;">
         {{time}}
       </el-col>
@@ -37,34 +36,21 @@
 </template>
 
 <script>
-import { userCenter } from '../api/api'
 export default {
   name: 'ChatList',
   data () {
     return {
-      avatar: '',
-      userId: 0
     }
   },
   props: {
     userName: { type: String, required: true },
     id: { required: true },
     content: { type: String, required: true },
-    time: { type: String, required: true }
+    time: { type: String, required: true },
+    userId: { required: true },
+    avatar: { type: String, required: true },
   },
   mounted () {
-    let formData = new FormData();
-    formData.append('username', this.userName)
-    userCenter(formData).then(response => {
-      if (response.data.code == 200) {
-        this.avatar = response.data.data.avatar
-        this.userId = response.data.data.id
-      } else {
-        this.$message.error(response.data.message)
-      }
-    }).catch(err => {
-      console.log(err)
-    })
   }
 }
 </script>
@@ -79,6 +65,10 @@ export default {
 }
 .el-row {
   margin-bottom: 10px;
+}
+.name {
+  width: 100%;
+  display: inline-block;
 }
 </style>
 

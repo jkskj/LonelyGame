@@ -35,10 +35,14 @@
                       :cover="item.cover"
                       :title="item.title"
                       @click.native="toDetail(item.pid)"></topic-list>
-          <el-pagination :page-size="20"
+          <el-empty :image-size="200"
+                    v-show="isEmpty"></el-empty>
+          <el-pagination :page-size="5"
                          :pager-count="11"
                          layout="prev, pager, next"
-                         :total="1000">
+                         :total="1"
+                         v-show="!isEmpty"
+                         style="text-align: center;">
           </el-pagination>
         </el-main>
       </el-main>
@@ -106,6 +110,15 @@ export default {
 
     },
     // immediate: true // watch侦听操作内的函数会立刻被执行
+  },
+  computed: {
+    isEmpty () {
+      if (this.topicList.length == 0) {
+        return true
+      }
+      else
+        return false
+    }
   },
   mounted () {
     this.model = this.$route.query.model

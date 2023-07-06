@@ -169,10 +169,12 @@ export default {
             const fd = new FormData()
             //image是后台接口需要参数名
             fd.append('file', file)
+            console.log(fd)
             //走后台接口进行上传返回上传后的图片地址
             // 第1个 return 是返回 Promise 对象
             // 为什么？因为 axios 本身就是返回 Promise 对象
             return uploadPicture(fd).then(res => {
+              console.log(res)
               // 这个 return 是返回最后的结果
               return res.data.data.pic_list[0]
             })
