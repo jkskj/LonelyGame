@@ -54,7 +54,6 @@ export default {
     // let formData = new FormData();
     // formData.append("page", "1")
     // console.log(formData)
-    console.log("asdasd")
     getRecommend().then(res => {
       console.log(res)
       this.topicList = res.data.data

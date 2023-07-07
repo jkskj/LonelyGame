@@ -23,7 +23,6 @@ service.interceptors.request.use(
     // 如有需要：注意使用token的时候需要引入cookie方法或者用本地localStorage等方法，推荐js-cookie
     const token = Cookies.get("token"); //这里取token之前，你肯定需要先拿到token,存一下
     if (token) {
-      console.log("token:", token);
       // config.params = { token: token }; //如果要求携带在参数中
       config.headers["Authorization"] = token; //如果要求携带在请求头中
     }

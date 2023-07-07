@@ -181,7 +181,8 @@ export default {
           if (response.data.code == 200) {
             console.log("注册成功", response);
             this.isSending = false;
-            this.$alert('注册成功,现在返回主页面', '提示', { type: 'success' })
+            this.$alert('注册成功,现在返回登录页面', '提示', { type: 'success' })
+            this.$router.push({ path: '/login' })
           }
           else {
             this.$alert(response.data.message, '提示', { type: 'warning' })

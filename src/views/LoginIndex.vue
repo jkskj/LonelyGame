@@ -99,6 +99,7 @@ export default {
             message: '登录成功,现在返回主页面',
             type: 'success'
           })
+
           this.$cookie.set('token', res.data.data.token, { 'sameSite': 'None', 'Secure': 'true', 'expires': 30 })
           this.$cookie.set('userName', res.data.data.username, { 'sameSite': 'None', 'Secure': 'true', 'expires': 30 })
           this.$store.commit("setToken", res.data.data.token)
@@ -106,6 +107,7 @@ export default {
           formData2.append('username', res.data.data.username)
           userCenter(formData2).then(response => {
             console.log(response)
+            this.$cookie.set('permission', response.data.data.permission, { 'sameSite': 'None', 'Secure': 'true', 'expires': 30 })
             this.$store.commit("setId", response.data.data.id)
             this.$store.commit("setName", response.data.data.username)
             this.$store.commit("setAvatar", response.data.data.avatar)

@@ -11,9 +11,6 @@ import router from "./router"; // 引入路由
 import VueRouter from "vue-router";
 import store from "./store";
 import jsCookie from "js-cookie";
-// import SocketService from "@/api/socket";
-// // 对服务端进行websocket的连接
-// SocketService.Instance.connect();
 
 // Vue.prototype.$socket = SocketService.Instance;
 import VueSocketIO from "vue-socket.io";

@@ -54,6 +54,9 @@ export default {
       //获取用户信息
       userCenter(formData2).then(response => {
         console.log(response)
+        if (!this.$cookie.get('permission')) {
+          this.$cookie.set('permission', response.data.data.permission, { 'sameSite': 'None', 'Secure': 'true', 'expires': 30 })
+        }
         this.$store.commit("setId", response.data.data.id)
         this.$store.commit("setName", response.data.data.username)
         this.$store.commit("setAvatar", response.data.data.avatar)
